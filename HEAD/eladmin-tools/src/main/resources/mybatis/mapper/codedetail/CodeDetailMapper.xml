@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezcore.tools.codedetail.dao.CodeDetailMapper">
+  <resultMap id="BaseResultMap" type="com.ezcore.tools.codedetail.po.CodeDetail">
+    <id column="cid" jdbcType="BIGINT" property="cid" />
+    <result column="ins_date" jdbcType="TIMESTAMP" property="insDate" />
+    <result column="ins_usr" jdbcType="VARCHAR" property="insUsr" />
+    <result column="upd_date" jdbcType="TIMESTAMP" property="updDate" />
+    <result column="upd_usr" jdbcType="VARCHAR" property="updUsr" />
+    <result column="kind" jdbcType="VARCHAR" property="kind" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="is_enabled" jdbcType="BIT" property="isEnabled" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="sort_code" jdbcType="VARCHAR" property="sortCode" />
+    <result column="property1" jdbcType="VARCHAR" property="property1" />
+    <result column="property2" jdbcType="VARCHAR" property="property2" />
+    <result column="property3" jdbcType="VARCHAR" property="property3" />
+    <result column="property4" jdbcType="VARCHAR" property="property4" />
+    <result column="property5" jdbcType="VARCHAR" property="property5" />
+    <result column="property6" jdbcType="VARCHAR" property="property6" />
+    <result column="property7" jdbcType="VARCHAR" property="property7" />
+    <result column="property8" jdbcType="VARCHAR" property="property8" />
+    <result column="property9" jdbcType="VARCHAR" property="property9" />
+    <result column="child_id" jdbcType="BIGINT" property="childId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    cid, ins_date, ins_usr, upd_date, upd_usr, kind, code, name, is_enabled, description, 
+    sort_code, property1, property2, property3, property4, property5, property6, property7, 
+    property8, property9, child_id, parent_id
+  </sql>
+  <select id="selectByExample" parameterType="com.ezcore.tools.codedetail.po.CodeDetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from codedetail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from codedetail
+    where cid = #{cid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from codedetail
+    where cid = #{cid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="cid" keyColumn="cid" parameterType="com.ezcore.tools.codedetail.po.CodeDetail">
+    insert into codedetail (ins_date, ins_usr, 
+      upd_date, upd_usr, kind, 
+      code, name, is_enabled, 
+      description, sort_code, property1, 
+      property2, property3, property4, 
+      property5, property6, property7, 
+      property8, property9, parent_id, child_id)
+    values #{insDate,jdbcType=TIMESTAMP}, #{insUsr,jdbcType=VARCHAR}, 
+      #{updDate,jdbcType=TIMESTAMP}, #{updUsr,jdbcType=VARCHAR}, #{kind,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{isEnabled,jdbcType=BIT}, 
+      #{description,jdbcType=VARCHAR}, #{sortCode,jdbcType=VARCHAR}, #{property1,jdbcType=VARCHAR}, 
+      #{property2,jdbcType=VARCHAR}, #{property3,jdbcType=VARCHAR}, #{property4,jdbcType=VARCHAR}, 
+      #{property5,jdbcType=VARCHAR}, #{property6,jdbcType=VARCHAR}, #{property7,jdbcType=VARCHAR}, 
+      #{property8,jdbcType=VARCHAR}, #{property9,jdbcType=VARCHAR}, #{parentId,jdbcType=BIGINT}, #{childId,jdbcType=BIGINT})
+  </insert>
+    <insert id="insertReturnId" useGeneratedKeys="true" keyProperty="cid" keyColumn="cid" parameterType="com.ezcore.tools.codedetail.po.CodeDetail">
+    insert into codedetail (ins_date, ins_usr, 
+      upd_date, upd_usr, kind, 
+      code, name, is_enabled, 
+      description, sort_code, property1, 
+      property2, property3, property4, 
+      property5, property6, property7, 
+      property8, property9, parent_id, child_id)
+    values (#{insDate,jdbcType=TIMESTAMP}, #{insUsr,jdbcType=VARCHAR}, 
+      #{updDate,jdbcType=TIMESTAMP}, #{updUsr,jdbcType=VARCHAR}, #{kind,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{isEnabled,jdbcType=BIT}, 
+      #{description,jdbcType=VARCHAR}, #{sortCode,jdbcType=VARCHAR}, #{property1,jdbcType=VARCHAR}, 
+      #{property2,jdbcType=VARCHAR}, #{property3,jdbcType=VARCHAR}, #{property4,jdbcType=VARCHAR}, 
+      #{property5,jdbcType=VARCHAR}, #{property6,jdbcType=VARCHAR}, #{property7,jdbcType=VARCHAR}, 
+      #{property8,jdbcType=VARCHAR}, #{property9,jdbcType=VARCHAR}, #{parentId,jdbcType=BIGINT}, #{childId,jdbcType=BIGINT})
+  <selectKey resultType="java.lang.Long" keyProperty="cid" order="AFTER">
+      select @@IDENTITY
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.ezcore.tools.codedetail.po.CodeDetail">
+    insert into codedetail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="insDate != null">
+        ins_date,
+      </if>
+      <if test="insUsr != null">
+        ins_usr,
+      </if>
+      <if test="updDate != null">
+        upd_date,
+      </if>
+      <if test="updUsr != null">
+        upd_usr,
+      </if>
+      <if test="kind != null">
+        kind,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="isEnabled != null">
+        is_enabled,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="sortCode != null">
+        sort_code,
+      </if>
+      <if test="property1 != null">
+        property1,
+      </if>
+      <if test="property2 != null">
+        property2,
+      </if>
+      <if test="property3 != null">
+        property3,
+      </if>
+      <if test="property4 != null">
+        property4,
+      </if>
+      <if test="property5 != null">
+        property5,
+      </if>
+      <if test="property6 != null">
+        property6,
+      </if>
+      <if test="property7 != null">
+        property7,
+      </if>
+      <if test="property8 != null">
+        property8,
+      </if>
+      <if test="property9 != null">
+        property9,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cid != null">
+        #{cid,jdbcType=BIGINT},
+      </if>
+      <if test="insDate != null">
+        #{insDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="insUsr != null">
+        #{insUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="updDate != null">
+        #{updDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updUsr != null">
+        #{updUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="kind != null">
+        #{kind,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnabled != null">
+        #{isEnabled,jdbcType=BIT},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="sortCode != null">
+        #{sortCode,jdbcType=VARCHAR},
+      </if>
+      <if test="property1 != null">
+        #{property1,jdbcType=VARCHAR},
+      </if>
+      <if test="property2 != null">
+        #{property2,jdbcType=VARCHAR},
+      </if>
+      <if test="property3 != null">
+        #{property3,jdbcType=VARCHAR},
+      </if>
+      <if test="property4 != null">
+        #{property4,jdbcType=VARCHAR},
+      </if>
+      <if test="property5 != null">
+        #{property5,jdbcType=VARCHAR},
+      </if>
+      <if test="property6 != null">
+        #{property6,jdbcType=VARCHAR},
+      </if>
+      <if test="property7 != null">
+        #{property7,jdbcType=VARCHAR},
+      </if>
+      <if test="property8 != null">
+        #{property8,jdbcType=VARCHAR},
+      </if>
+      <if test="property9 != null">
+        #{property9,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ezcore.tools.codedetail.po.CodeDetail">
+    update codedetail
+    <set>
+      <if test="insDate != null">
+        ins_date = #{insDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="insUsr != null">
+        ins_usr = #{insUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="updDate != null">
+        upd_date = #{updDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updUsr != null">
+        upd_usr = #{updUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="kind != null">
+        kind = #{kind,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnabled != null">
+        is_enabled = #{isEnabled,jdbcType=BIT},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="sortCode != null">
+        sort_code = #{sortCode,jdbcType=VARCHAR},
+      </if>
+      <if test="property1 != null">
+        property1 = #{property1,jdbcType=VARCHAR},
+      </if>
+      <if test="property2 != null">
+        property2 = #{property2,jdbcType=VARCHAR},
+      </if>
+      <if test="property3 != null">
+        property3 = #{property3,jdbcType=VARCHAR},
+      </if>
+      <if test="property4 != null">
+        property4 = #{property4,jdbcType=VARCHAR},
+      </if>
+      <if test="property5 != null">
+        property5 = #{property5,jdbcType=VARCHAR},
+      </if>
+      <if test="property6 != null">
+        property6 = #{property6,jdbcType=VARCHAR},
+      </if>
+      <if test="property7 != null">
+        property7 = #{property7,jdbcType=VARCHAR},
+      </if>
+      <if test="property8 != null">
+        property8 = #{property8,jdbcType=VARCHAR},
+      </if>
+      <if test="property9 != null">
+        property9 = #{property9,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="childId != null">
+        child_id = #{childId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where cid = #{cid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ezcore.tools.codedetail.po.CodeDetail">
+    update codedetail
+    set ins_date = #{insDate,jdbcType=TIMESTAMP},
+      ins_usr = #{insUsr,jdbcType=VARCHAR},
+      upd_date = #{updDate,jdbcType=TIMESTAMP},
+      upd_usr = #{updUsr,jdbcType=VARCHAR},
+      kind = #{kind,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      is_enabled = #{isEnabled,jdbcType=BIT},
+      description = #{description,jdbcType=VARCHAR},
+      sort_code = #{sortCode,jdbcType=VARCHAR},
+      property1 = #{property1,jdbcType=VARCHAR},
+      property2 = #{property2,jdbcType=VARCHAR},
+      property3 = #{property3,jdbcType=VARCHAR},
+      property4 = #{property4,jdbcType=VARCHAR},
+      property5 = #{property5,jdbcType=VARCHAR},
+      property6 = #{property6,jdbcType=VARCHAR},
+      property7 = #{property7,jdbcType=VARCHAR},
+      property8 = #{property8,jdbcType=VARCHAR},
+      property9 = #{property9,jdbcType=VARCHAR},
+      child_id = #{childId,jdbcType=BIGINT},
+      parent_id = #{parentId,jdbcType=BIGINT}
+    where cid = #{cid,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectGuiYear" resultType="java.lang.String">
+  select distinct substr(property1,1,4) 
+  from codedetail 
+  where kind = 'gui.word_period' 
+  order by 1
+  </select>
+</mapper>

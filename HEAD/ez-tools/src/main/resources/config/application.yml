@@ -1,0 +1,65 @@
+#dev/production通用設定檔
+#無特別需求不需更動此檔
+
+server:
+  port: 8000
+
+# 注意此設定，生產環境必須是false
+service:
+  use-mock-impl: false
+
+spring:
+  freemarker:
+    check-template-location: false
+  profiles:
+    active: '@use-profile@'
+  jackson:
+    time-zone: GMT+8
+  data:
+    redis:
+      repositories:
+        enabled: false
+#  pid:
+#    file: /自行指定位置/eladmin.pid
+
+  #配置 Jpa
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: true
+    properties:
+      hibernate:
+#        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: org.hibernate.dialect.SQLServer2012Dialect
+    mapping-resources:
+    - META-INF/demo.xml
+    - META-INF/codedetailNativeQuery.xml
+    - META-INF/caseManagerNativeQuery.xml
+
+  redis:
+    #數據庫索引
+    database: ${REDIS_DB:0}
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PWD:}
+    #連線超時時間
+    timeout: 5000
+
+task:
+  pool:
+    # 核心執行緒池大小
+    core-pool-size: 10
+    # 最大執行緒數
+    max-pool-size: 30
+    # 活躍時間
+    keep-alive-seconds: 60
+    # 佇列容量
+    queue-capacity: 50
+
+#郵箱驗證碼有效時間/秒
+code:
+  expiration: 300
+
+#密碼加密傳輸，前端公鑰加密，後端私鑰解密
+rsa:
+  private_key: MIIBUwIBADANBgkqhkiG9w0BAQEFAASCAT0wggE5AgEAAkEA0vfvyTdGJkdbHkB8mp0f3FE0GYP3AYPaJF7jUd1M0XxFSE2ceK3k2kw20YvQ09NJKk+OMjWQl9WitG9pB6tSCQIDAQABAkA2SimBrWC2/wvauBuYqjCFwLvYiRYqZKThUS3MZlebXJiLB+Ue/gUifAAKIg1avttUZsHBHrop4qfJCwAI0+YRAiEA+W3NK/RaXtnRqmoUUkb59zsZUBLpvZgQPfj1MhyHDz0CIQDYhsAhPJ3mgS64NbUZmGWuuNKp5coY2GIj/zYDMJp6vQIgUueLFXv/eZ1ekgz2Oi67MNCk5jeTF2BurZqNLR3MSmUCIFT3Q6uHMtsB9Eha4u7hS31tj1UWE+D+ADzp59MGnoftAiBeHT7gDMuqeJHPL4b+kC+gzV4FGTfhR9q3tTbklZkD2A==

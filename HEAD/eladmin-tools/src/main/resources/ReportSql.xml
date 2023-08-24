@@ -1,0 +1,24 @@
+<queries>
+	<query id="USER_SELECT_ALL">SELECT * FROM USERS</query>
+	<query id="USER_SELECT_BY_ID">SELECT * FROM USERS WHERE ID = ?</query>
+	<!-- More queries here -->
+	<query id="LOG_REPORT">
+        <![CDATA[
+        SELECT
+            CAST(create_time AS DATE) AS date,
+            COUNT(CASE WHEN log_type = 'info' THEN 1 END) AS ok,
+            COUNT(CASE WHEN log_type = 'error_400' THEN 1 END) AS errNormal,
+            COUNT(CASE WHEN log_type IN ('error_901', 'error_903') THEN 1 END) AS errLogin,
+            COUNT(CASE WHEN log_type = 'error_950' THEN 1 END) AS errPermit,
+            COUNT(CASE WHEN log_type = 'error_999' THEN 1 END) AS errFatal
+        FROM
+            sys_log
+        WHERE
+            create_time BETWEEN :startDate AND :endDate
+        GROUP BY
+            CAST(create_time AS DATE)
+        ORDER BY
+            date
+        ]]>
+    </query>
+</queries>

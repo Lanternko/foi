@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>me.zhengjie</groupId>
+	<artifactId>eladmin</artifactId>
+	<packaging>pom</packaging>
+	<version>2.6</version>
+
+	<!-- 寫在這份pom檔的dependency、build plugin的內容將統一套用至以下子模組 -->
+	<modules>
+		<module>eladmin-common</module>
+		<module>eladmin-logging</module>
+		<module>eladmin-system</module>
+		<module>eladmin-tools</module>
+		<module>eladmin-generator</module>
+		<module>ez-tools</module>
+	</modules>
+
+	<name>ELADMIN 後臺管理</name>
+	<url>https://eladmin.vip</url>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.6.4</version>
+	</parent>
+
+	<properties>
+		<log4j2.version>2.17.0</log4j2.version>
+<!--		<logback.version>1.2.9</logback.version>-->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<log4jdbc.version>1.16</log4jdbc.version>
+		<swagger.version>3.0.0</swagger.version>
+		<fastjson.version>1.2.83</fastjson.version>
+		<!-- <druid.version>1.2.8</druid.version> -->
+		<commons-pool2.version>2.11.1</commons-pool2.version>
+		<mapstruct.version>1.4.2.Final</mapstruct.version>
+		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
+	</properties>
+	
+	<!-- 在MAVEN 中引入本地JAR檔 -->
+	<!-- mvn deploy:deploy-file
+	-Dfile="C:\java\workspace\eladmin-only\ezcore-utils\target\ezcore-utils-1.0.0.jar"
+	"-DgroupId=com.ezcore" "-DartifactId=ezcore-utils" "-Dversion=1.0.0"
+	"-Dpackaging=jar" "-DcreateChecksum=true" "-Durl=file:./exlib/"
+	"-DrepositoryId=exlib" -->
+	<!-- <repositories>
+    <repository>
+      <id>exlib</id>
+	<url>file:///${project.basedir}/exlib/</url>
+    </repository>
+	</repositories> -->
+	<dependencies>
+
+		<!--Spring boot 核心-->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!--Spring boot Web容器-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<!--Spring boot 測試-->
+
+		<dependency>
+
+			<groupId>org.springframework.boot</groupId>
+
+			<artifactId>spring-boot-starter-test</artifactId>
+
+			<scope>test</scope>
+
+		</dependency>
+
+		<!--Spring boot 安全框架-->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- spring boot 快取 -->
+
+		<dependency>
+
+			<groupId>org.springframework.boot</groupId>
+
+			<artifactId>spring-boot-starter-cache</artifactId>
+
+		</dependency>
+
+		<!--Spring boot Redis-->
+
+		<dependency>
+
+			<groupId>org.springframework.boot</groupId>
+
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+
+		</dependency>
+
+		<!--spring boot 整合redis所需common-pool2-->
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-pool2 -->
+
+		<dependency>
+
+			<groupId>org.apache.commons</groupId>
+
+			<artifactId>commons-pool2</artifactId>
+
+			<version>${commons-pool2.version}</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.commons</groupId>
+
+			<artifactId>commons-lang3</artifactId>
+
+		</dependency>
+
+		<!--監控sql日誌-->
+
+		<dependency>
+
+			<groupId>org.bgee.log4jdbc-log4j2</groupId>
+
+			<artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
+
+			<version>${log4jdbc.version}</version>
+
+		</dependency>
+
+		<!-- Swagger UI 相關 -->
+		<!--
+		https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
+			<version>3.0.0</version>
+			<exclusions>
+				<!-- 修正開啟swagger時跳出WARN層級的NumberFormatException訊息 -->
+				<exclusion>
+					<groupId>io.swagger</groupId>
+					<artifactId>swagger-models</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.swagger/swagger-models -->
+		<!-- 修正開啟swagger時跳出WARN層級的NumberFormatException訊息 -->
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-models</artifactId>
+			<version>1.5.21</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>31.1-jre</version>
+		</dependency>
+
+		<!--Mysql依賴包 -->
+
+		<!--    <dependency>-->
+		<!--      <groupId>mysql</groupId>-->
+		<!--      <artifactId>mysql-connector-java</artifactId>-->
+		<!--      <scope>compile</scope>-->
+		<!--    </dependency>-->
+
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+
+		<!-- druid數據源驅動 -->
+
+		<!-- <dependency> -->
+
+		<!-- <groupId>com.alibaba</groupId> -->
+
+		<!-- <artifactId>druid-spring-boot-starter</artifactId> -->
+
+		<!-- <version>${druid.version}</version> -->
+
+		<!-- </dependency> -->
+
+		<!-- ip2region IP庫 -->
+		<!-- https://mvnrepository.com/artifact/net.dreamlu/mica-ip2region -->
+		<dependency>
+			<groupId>net.dreamlu</groupId>
+			<artifactId>mica-ip2region</artifactId>
+			<version>2.6.3</version>
+		</dependency>
+
+		<!--lombok外掛-->
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- excel工具 -->
+		<dependency>
+
+			<groupId>org.apache.poi</groupId>
+
+			<artifactId>poi</artifactId>
+
+			<version>5.2.0</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.poi</groupId>
+
+			<artifactId>poi-ooxml</artifactId>
+
+			<version>5.2.0</version>
+
+		</dependency>
+
+		<!-- fastjson -->
+
+		<dependency>
+
+			<groupId>com.alibaba</groupId>
+
+			<artifactId>fastjson</artifactId>
+
+			<version>${fastjson.version}</version>
+
+		</dependency>
+
+		<!--mapStruct依賴-->
+
+		<dependency>
+
+			<groupId>org.mapstruct</groupId>
+
+			<artifactId>mapstruct</artifactId>
+
+			<version>${mapstruct.version}</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.mapstruct</groupId>
+
+			<artifactId>mapstruct-processor</artifactId>
+
+			<version>${mapstruct.version}</version>
+
+			<scope>provided</scope>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>javax.inject</groupId>
+
+			<artifactId>javax.inject</artifactId>
+
+			<version>1</version>
+
+		</dependency>
+
+		<!-- Java圖形驗證碼 -->
+
+		<dependency>
+
+			<groupId>com.github.whvcse</groupId>
+
+			<artifactId>easy-captcha</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<!-- 解析客戶端操作系統、瀏覽器資訊 -->
+
+		<dependency>
+
+			<groupId>nl.basjes.parse.useragent</groupId>
+
+			<artifactId>yauaa</artifactId>
+
+			<version>6.11</version>
+
+		</dependency>
+
+		<!-- 本地jar檔 -->
+		<!-- <dependency>
+      <groupId>com.ezcore</groupId>
+		<artifactId>ezcore-utils</artifactId>
+      <version>1.0.0</version>
+		</dependency> -->
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>3.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.reactivestreams</groupId>
+			<artifactId>reactive-streams</artifactId>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<!-- 跳過單元測試 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>	
+		</plugins>
+	</build>
+</project>

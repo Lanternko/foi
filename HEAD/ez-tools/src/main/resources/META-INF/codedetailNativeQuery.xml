@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm" version="2.0">
+	<named-native-query name="codedetail.getChildKindList" result-set-mapping="fnCodeChildKindListMapping">
+		<query>
+			select pCid, pKind, pCode, pName, cid, kind, code, name, is_enabled as isEnabled, ins_date as insDate, 
+			ins_usr as insUsr, upd_date as updDate, upd_usr as updUsr, description, sort_code as sortCode, 
+			property1, property2, property3, property4, property5, property6, property7, property8, property9, 
+			child_id as childId, parent_id as parentId, option1, option2, option3 
+			from dbo.fnCodeChildKindList(:parentKind, :parentCode, :childKind) ORDER BY sortCode;
+		</query>
+	</named-native-query>
+	<named-native-query name="codedetail.findUsersByWorkGroupCode" result-set-mapping="comm04ResponseMapping">
+		<query>
+            SELECT DISTINCT b.user_id as userId, b.account as account, b.name as username, b.nickname as nickname 
+			FROM sys_role AS a 
+			INNER JOIN sys_users_roles AS ab ON a.role_id = ab.role_id 
+			INNER JOIN sys_user AS b ON ab.user_id = b.user_id WHERE a.role_id IN (
+  				SELECT ss.value FROM codedetail AS T CROSS APPLY STRING_SPLIT(T.property2, ',') AS SS 
+ 				WHERE kind = 'workGroup' AND code = :workGroupCode) AND b.enabled = 1;
+		</query>
+	</named-native-query>
+<!-- 	<named-native-query name="codedetail.getChildKindListWithProperty1" result-set-mapping="fnCodeChildKindListMapping"> -->
+<!-- 		<query> -->
+<!-- 			select pCid, pKind, pCode, pName, cid, kind, code, name, is_enabled as isEnabled, ins_date as insDate,  -->
+<!-- 			ins_usr as insUsr, upd_date as updDate, upd_usr as updUsr, description, sort_code as sortCode,  -->
+<!-- 			property1, property2, property3, property4, property5, property6, property7, property8, property9,  -->
+<!-- 			child_id as childId, parent_id as parentId, option1, option2, option3  -->
+<!-- 			from dbo.fnCodeChildKindList(:parentKind, :parentCode, :childKind)  -->
+<!-- 			where property1 = :caseTypeBandCode; -->
+<!-- 		</query> -->
+<!-- 	</named-native-query> -->
+
+<!-- 物件mapping -->
+	<sql-result-set-mapping name="fnCodeChildKindListMapping">
+		<constructor-result target-class="com.ezcore.foi.ecase.dao.dto.ChildKindListDto">
+			<column name="pCid" class="java.lang.Long" />
+			<column name="pKind" class="java.lang.String" />
+			<column name="pCode" class="java.lang.String" />
+			<column name="pName" class="java.lang.String" />
+			<column name="cid" class="java.lang.Long" />
+			<column name="kind" class="java.lang.String" />
+			<column name="code" class="java.lang.String" />
+			<column name="name" class="java.lang.String" />
+			<column name="isEnabled" class="java.lang.Boolean" />
+			<column name="insDate" class="java.util.Date" />
+			<column name="insUsr" class="java.lang.String" />
+			<column name="updDate" class="java.util.Date" />
+			<column name="updUsr" class="java.lang.String" />
+			<column name="description" class="java.lang.String" />
+			<column name="sortCode" class="java.lang.String" />
+			<column name="property1" class="java.lang.String" />
+			<column name="property2" class="java.lang.String" />
+			<column name="property3" class="java.lang.String" />
+			<column name="property4" class="java.lang.String" />
+			<column name="property5" class="java.lang.String" />
+			<column name="property6" class="java.lang.String" />
+			<column name="property7" class="java.lang.String" />
+			<column name="property8" class="java.lang.String" />
+			<column name="property9" class="java.lang.String" />
+			<column name="childId" class="java.lang.Long" />
+			<column name="parentId" class="java.lang.Long" />
+			<column name="option1" class="java.lang.String" />
+			<column name="option2" class="java.lang.String" />
+			<column name="option3" class="java.lang.String" />
+		</constructor-result>
+	</sql-result-set-mapping>
+	<sql-result-set-mapping name="comm04ResponseMapping">
+		<constructor-result target-class="com.ezcore.foi.ecase.model.response.comm.Comm04Response">
+			<column name="userId" class="java.lang.Long" />
+			<column name="account" class="java.lang.String" />
+			<column name="username" class="java.lang.String" />
+			<column name="nickname" class="java.lang.String" />
+		</constructor-result>
+	</sql-result-set-mapping>
+</entity-mappings>

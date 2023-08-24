@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm" version="2.0">
+	<named-native-query name="DemoQuery.selectAllNativeTest" result-class="com.ezcore.tools.demo.dao.entity.Demo">
+		<query>
+			select * from __demo;
+		</query>
+	</named-native-query>
+	<named-native-query name="DemoQuery.selectOneNativeTest" result-class="com.ezcore.tools.demo.dao.entity.Demo">
+		<query>
+			select * from __demo where __demo_msg_b = :demoMsgb and create_by = :createBy order by __demo_id desc;
+		</query>
+	</named-native-query>
+</entity-mappings>

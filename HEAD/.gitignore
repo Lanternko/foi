@@ -1,0 +1,14 @@
+.idea/
+*.iml
+target/
+deploy/
+*/*.iml
+.gradle/
+application.pid
+.settings/
+.project
+.factorypath
+.classpath
+application-dev.yml
+/.metadata/
+.vscode/settings.json

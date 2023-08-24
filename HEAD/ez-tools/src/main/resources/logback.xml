@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds" debug="false">
+	<!--server log存放路徑, 預設為(user home)/ez-admin/logs/ap -->
+	<property name="file-path" value="${user.home}/ez-admin/logs/ap/" />
+	
+    <contextName>dev</contextName>
+    <property name="log.charset" value="utf-8" />
+	<property name="log.filepattern" value="%contextName- %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" />
+	<property name="log.consolepattern" value="%contextName- %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" />
+
+    <!--輸出到terminal-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${log.consolepattern}</pattern>
+            <charset>${log.charset}</charset>
+        </encoder>
+    </appender>
+    
+    <!--輸出為檔案-->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    	<file>${file-path}ez-admin.log</file>
+    	<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      		<fileNamePattern>${file-path}archived/ez-admin-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      		<!--單檔最大10mb、保存7天-->
+      		<maxFileSize>10MB</maxFileSize>    
+       		<maxHistory>7</maxHistory>
+    	</rollingPolicy>
+        <encoder>
+            <pattern>${log.filepattern}</pattern>
+            <charset>${log.charset}</charset>
+        </encoder>
+    </appender>
+
+    <!--普通日誌輸出到控制檯-->
+    <root level="info">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+
+    <!--監控sql日誌輸出,如需監控 Sql 列印，請設定為 INFO -->
+    <logger name="jdbc.sqlonly" level="OFF" additivity="false">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+
+    <logger name="jdbc.resultset" level="OFF" additivity="false">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+
+    <!--  如想看到表格數據，將OFF改為INFO  -->
+    <logger name="jdbc.resultsettable" level="OFF" additivity="false">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+
+    <logger name="jdbc.connection" level="OFF" additivity="false">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+
+    <logger name="jdbc.sqltiming" level="OFF" additivity="false">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+
+    <logger name="jdbc.audit" level="OFF" additivity="false">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+</configuration>

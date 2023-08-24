@@ -1,0 +1,9 @@
+controller receive a map type param(input)
+detect the report name
+	go to SharedReportService
+	go to the correct worker. by the report name
+		decide if it is a multi-sheet
+		call the template, and put in data
+			go to excelServiceImpl or MultiSheetServiceImpl
+			go to its generator and generate the report file
+				return the file path to controller

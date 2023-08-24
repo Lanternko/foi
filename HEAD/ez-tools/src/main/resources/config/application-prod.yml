@@ -1,0 +1,129 @@
+#配置數據源
+spring:
+  datasource:
+    druid:
+      db-type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      url: jdbc:log4jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:eladmin}?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
+      username: ${DB_USER:root}
+      password: ${DB_PWD:123456}
+      # 初始連線數
+      initial-size: 5
+      # 最小連線數
+      min-idle: 15
+      # 最大連線數
+      max-active: 30
+      # 獲取連線超時時間
+      max-wait: 5000
+      # 連線有效性檢測時間
+      time-between-eviction-runs-millis: 60000
+      # 連線在池中最小生存的時間
+      min-evictable-idle-time-millis: 300000
+      # 連線在池中最大生存的時間
+      max-evictable-idle-time-millis: 900000
+      # 指明連線是否被空閑連線回收器(如果有)進行檢驗.如果檢測失敗,則連線將被從池中去除
+      test-while-idle: true
+      # 指明是否在從池中取出連線前進行檢驗,如果檢驗失敗, 則從池中去除連線並嘗試取出另一個
+      test-on-borrow: true
+      # 是否在歸還到池中前進行檢驗
+      test-on-return: false
+      # 檢測連線是否有效
+      validation-query: select 1
+      # 配置監控統計
+      webStatFilter:
+        enabled: true
+      stat-view-servlet:
+        allow:
+        enabled: true
+        # 控制檯管理使用者名稱和密碼
+        url-pattern: /druid/*
+        reset-enable: false
+        login-username: admin
+        login-password: 123456
+      filter:
+        stat:
+          enabled: true
+          # 記錄慢SQL
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+
+# 登錄相關配置
+login:
+  #  是否限制單使用者登錄
+  single-login: false
+  # Redis使用者登錄快取配置
+  user-cache:
+    # 存活時間/秒
+    idle-time: 7200
+  #  驗證碼
+  login-code:
+    #  驗證碼型別配置 檢視 LoginProperties 類
+    code-type: arithmetic
+    #  登錄圖形驗證碼有效時間/分鐘
+    expiration: 2
+    #  驗證碼高度
+    width: 111
+    #  驗證碼寬度
+    height: 36
+    # 內容長度
+    length: 2
+    # 字型名稱，為空則使用預設字型，如遇到線上亂碼，設定其他字型即可
+    font-name:
+    # 字型大小
+    font-size: 25
+
+#jwt
+jwt:
+  header: Authorization
+  # 令牌字首
+  token-start-with: Bearer
+  # 必須使用最少88位的Base64對該令牌進行編碼
+  base64-secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
+  # 令牌過期時間 此處單位/毫秒 ，預設2小時，可在此網站產生 https://www.convertworld.com/zh-hans/time/milliseconds.html
+  token-validity-in-seconds: 7200000
+  # 線上使用者key
+  online-key: online-token-
+  # 驗證碼
+  code-key: code-key-
+  # token 續期檢查時間範圍（預設30分鐘，單位預設毫秒），在token即將過期的一段時間內使用者操作了，則給使用者的token續期
+  detect: 1800000
+  # 續期時間範圍，預設 1小時，這裡單位毫秒
+  renew: 3600000
+
+# IP 本地解析
+ip:
+  local-parsing: true
+
+#是否允許產生程式碼，生產環境設定為false
+generator:
+  enabled: false
+
+#如果生產環境要開啟swagger，需要配置請求地址
+#springfox:
+#  documentation:
+#    swagger:
+#      v2:
+#        host: # 介面域名或外網ip
+
+#是否開啟 swagger-ui
+swagger:
+  enabled: false
+
+# 檔案儲存路徑
+file:
+  mac:
+    path: ~/file/
+    avatar: ~/avatar/
+  linux:
+    path: /home/ez-admin/file/
+    avatar: /home/ez-admin/avatar/
+  windows:
+    path: C:\ez-admin\file\
+    avatar: C:\ez-admin\avatar\
+  # 檔案大小 /M
+  maxSize: 100
+  avatarMaxSize: 5

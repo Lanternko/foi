@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezcore.tools.htmlPost.dao.HtmlPostMapper">
+  <resultMap id="BaseResultMap" type="com.ezcore.tools.htmlPost.po.HtmlPost">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="html_doc_id" jdbcType="BIGINT" property="htmlDocId" />
+    <result column="begin_date" jdbcType="TIMESTAMP" property="beginDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="display" jdbcType="VARCHAR" property="display" />
+    <result column="pin" jdbcType="BIT" property="pin" />
+    <result column="bold" jdbcType="BIT" property="bold" />
+    <result column="title_color" jdbcType="VARCHAR" property="titleColor" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, html_doc_id, begin_date, end_date, display, pin, title_color, bold
+  </sql>
+  <select id="selectByExample" parameterType="com.ezcore.tools.htmlPost.po.HtmlPostExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from html_post
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from html_post
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from html_post
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.ezcore.tools.htmlPost.po.HtmlPost">
+    insert into html_post (html_doc_id, begin_date, 
+      end_date, display, pin, title_color, bold)
+    values (#{htmlDocId,jdbcType=BIGINT}, #{beginDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{display,jdbcType=VARCHAR}, #{pin,jdbcType=BIT},#{titleColor,jdbcType=VARCHAR},#{bold,jdbcType=BIT})
+  </insert>
+    <insert id="insertReturnId" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.ezcore.tools.htmlPost.po.HtmlPost">
+    insert into html_post (html_doc_id, begin_date, 
+      end_date, display,pin, title_color, bold)
+    values (#{htmlDocId,jdbcType=BIGINT}, #{beginDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{display,jdbcType=VARCHAR}, #{pin,jdbcType=BIT},#{titleColor,jdbcType=VARCHAR},#{bold,jdbcType=BIT})
+  
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+        select @@IDENTITY
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.ezcore.tools.htmlPost.po.HtmlPost">
+    insert into html_post
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="htmlDocId != null">
+        html_doc_id,
+      </if>
+      <if test="beginDate != null">
+        begin_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="display != null">
+        display,
+      </if>
+      <if test="pin != null">
+        pin,
+      </if>
+      <if test="titleColor != null">
+        title_color,
+      </if>
+      <if test="bold != null">
+        bold,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="htmlDocId != null">
+        #{htmlDocId,jdbcType=BIGINT},
+      </if>
+      <if test="beginDate != null">
+        #{beginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="display != null">
+        #{display,jdbcType=VARCHAR},
+      </if>
+      <if test="pin != null">
+        #{pin,jdbcType=BIT},
+      </if>
+      <if test="titleColor != null">
+        #{titleColor,jdbcType=VARCHAR},
+      </if>
+      <if test="bold != null">
+        #{bold,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ezcore.tools.htmlPost.po.HtmlPostExample" resultType="java.lang.Long">
+    select count(*) from html_post
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ezcore.tools.htmlPost.po.HtmlPost">
+    update html_post
+    <set>
+      <if test="htmlDocId != null">
+        html_doc_id = #{htmlDocId,jdbcType=BIGINT},
+      </if>
+      <if test="beginDate != null">
+        begin_date = #{beginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="display != null">
+        display = #{display,jdbcType=VARCHAR},
+      </if>
+      <if test="pin != null">
+        pin = #{pin,jdbcType=BIT},
+      </if>
+      <if test="titleColor != null">
+        title_color = #{titleColor,jdbcType=VARCHAR},
+      </if>
+      <if test="bold != null">
+        bold = #{bold,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ezcore.tools.htmlPost.po.HtmlPost">
+    update html_post
+    set html_doc_id = #{htmlDocId,jdbcType=BIGINT},
+      begin_date = #{beginDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      display = #{display,jdbcType=VARCHAR},
+      pin = #{pin,jdbcType=BIT},
+      title_color = #{titleColor,jdbcType=VARCHAR},
+      bold = #{bold,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

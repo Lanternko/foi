@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm" version="2.0">
+	<named-native-query name="caseManager.findCaseRecords" result-set-mapping="caseDataResultMapping">
+		<query>
+                  select a.id as caseMasterTid, 
+                         a.center_owner_account as centerOwnerAccount, 
+                         a.case_type_cid as caseTypeCid, 
+                         dbo.fnGetCodeColumn(a.case_type_cid, 'code') as caseTypeCode, 
+                         dbo.fnGetCodeColumn(a.case_type_cid, 'name') as caseTypeName, 
+                         a.in_method_cid as inMethodCid, 
+                         dbo.fnGetCodeColumn(a.in_method_cid, 'code') as inMethodCode, 
+                         dbo.fnGetCodeColumn(a.in_method_cid, 'name') as inMethodName, 
+                         a.case_class_cid as caseClassCid, 
+                         dbo.fnGetCodeColumn(a.case_class_cid, 'code') as caseClassCode, 
+                         dbo.fnGetCodeColumn(a.case_class_cid, 'name') as caseClassName, 
+                  	 case_no as caseNo, 
+                         '' as caseUsers, 
+                  	 c.name as companyName, 
+                         a.dispute_kind_cid as disputeKindCid, 
+                  	 case_date as caseDate, 
+                  	 b.issue_sure_date as issueSureDate, 
+                         f1.cid as flowCodeCid, 
+                         f1.code as flowCodeCode, 
+                         f1.name as flowCodeName, 
+                  	 is_close as isClose, 
+                         a.close_status_cid as closeStatusCid, 
+                         dbo.fnGetCodeColumn(a.close_reason1_cid, 'code') as closeStatusCode, 
+                         dbo.fnGetCodeColumn(a.close_reason1_cid, 'name') as closeStatusName, 
+                         a.close_reason1_cid as closeReasonCid, 
+                         dbo.fnGetCodeColumn(a.close_reason1_cid, 'code') as closeReasonCode, 
+                         dbo.fnGetCodeColumn(a.close_reason1_cid, 'name') as closeReasonName, 
+                  	 b.doc_year as docYear, 
+                  	 b.doc_word as docWord, 
+                  	 b.doc_no as docNo 
+                    from CASE_MASTER a 
+                    Left Outer join CASE_DOC_EXT B on a.id = b.case_master_tid
+                    Left Outer join COMPANY c on a.company_tid = c.ID	
+                    Left outer join CASE_FLOW f  on a.latest_case_flow_tid = f.id
+                    Left join codedetail f1 on f.flow_code_cid = f1.cid
+                   where case_type_cid in :caseTypeCids 
+                     and in_method_cid in :inMethodCids 
+                     and case_class_cid in :caseClassCids 
+                     and a.reparation_cid	= :reparationCid 
+                     and a.dispute_kind_cid = :disputeKindCid 
+                     and a.case_no = :caseNo 
+                     and a.center_owner_account = :centerOwnerAccount 
+                     and a.case_date :caseDate 
+                     and a.continue_status_cid = :continueStatusCid 
+                     and a.is_close = :isClose 
+                     and a.appeal_case_no = :appealCaseNo 
+                     and a.latest_case_flow_tid	= :latestCaseFlowTid 
+                     and b.receive_name = :receiveName 
+                     and (b.doc_year = :docYear 
+                        and b.doc_word = :docWord 
+                  	   and b.doc_no = :docNo) 
+                     and exists (select 1 from COMPANY_INDUSTRY# s1 where s1.company_tid = a.company_tid and s1.industry_cid = :industryCid) 
+                     and exists (select 1 from case_user s1 
+                                          where a.id = s1.case_master_tid
+                  						  and s1.case_user_kind_cid = dbo.fnGetCodeCid('case_user_kind', 'applicant') 
+                  						  and (s1.name like concat('%', :username, '%') 
+                  						       and idno_crypt = :idnoCrypt 
+                  							   and phone1_no_crypt = :phone1NoCrypt 
+                  							   and phone2_no_crypt = :phone2NoCrypt)) 
+                  	and exists (select 1 from case_user s1 
+                                          where a.id = s1.case_master_tid
+                  						  and s1.case_user_kind_cid = dbo.fnGetCodeCid('case_user_kind', 'agent') 
+                  						  and (s1.name like concat('%', :username, '%') 
+                  						       and idno_crypt = :idnoCrypt 
+                  							   and phone1_no_crypt = :phone1NoCrypt 
+                  							   and phone2_no_crypt = :phone2NoCrypt)) 
+                     and exists (select 1 from case_memo s1 
+                                  where a.id = s1.case_master_tid 
+                  				  and s1.memo_type_cid = dbo.fnGetCodeCid('memo_type', 'annotation') 
+                  				  and s1.memo_text like concat('%', '', '%'));
+		</query>
+	</named-native-query>
+      <named-native-query name="caseManager.findEarlist10034FlowTime">
+		<query>
+                  select b.flow_time from case_master a 
+                  left join case_flow b on a.id = b.case_master_tid 
+						    and b.flow_code_cid = dbo.fnGetCodeCid('flow_code', '10034') 
+                  where a.id = convert(uniqueidentifier, :caseMasterTid) 
+                  order by b.flow_time asc;
+		</query>
+	</named-native-query>
+
+      <!-- 物件mapping -->
+	<sql-result-set-mapping name="caseDataResultMapping">
+		<constructor-result target-class="com.ezcore.foi.ecase.model.bo.casedatabo.Result">
+                  <column name="caseMasterTid" class="java.lang.String" />
+                  <column name="centerOwnerAccount" class="java.lang.String" />
+                  <column name="caseTypeCid" class="java.lang.Long" />
+                  <column name="caseTypeCode" class="java.lang.String" />
+                  <column name="caseTypeName" class="java.lang.String" />
+                  <column name="inMethodCid" class="java.lang.Long" />
+                  <column name="inMethodCode" class="java.lang.String" />
+                  <column name="inMethodName" class="java.lang.String" />
+                  <column name="caseClassCid" class="java.lang.Long" />
+                  <column name="caseClassCode" class="java.lang.String" />
+                  <column name="caseClassName" class="java.lang.String" />
+                  <column name="caseNo" class="java.lang.String" />
+                  <column name="caseUsers" class="java.lang.String" />
+                  <column name="companyName" class="java.lang.String" />
+                  <column name="disputeKindCid" class="java.lang.Long" />
+                  <column name="caseDate" class="java.util.Date" />
+                  <column name="issueSureDate" class="java.util.Date" />
+                  <column name="flowCodeCid" class="java.lang.Long" />
+                  <column name="flowCodeCode" class="java.lang.String" />
+                  <column name="flowCodeName" class="java.lang.String" />
+                  <column name="isClose" class="java.lang.Boolean" />
+                  <column name="closeStatusCid" class="java.lang.Long" />
+                  <column name="closeStatusCode" class="java.lang.String" />
+                  <column name="closeStatusName" class="java.lang.String" />
+                  <column name="closeReasonCid" class="java.lang.Long" />
+                  <column name="closeReasonCode" class="java.lang.String" />
+                  <column name="closeReasonName" class="java.lang.String" />
+                  <column name="docYear" class="java.lang.String" />
+                  <column name="docWord" class="java.lang.String" />
+                  <column name="docNo" class="java.lang.String" />
+		</constructor-result>
+	</sql-result-set-mapping>
+
+</entity-mappings>

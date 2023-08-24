@@ -1,0 +1,126 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>me.zhengjie</groupId>
+		<artifactId>eladmin</artifactId>
+		<version>2.6</version>
+	</parent>
+	<groupId>com.ezcore</groupId>
+	<artifactId>ez-tools</artifactId>
+	<description>ezcore開發模組</description>
+
+	<packaging>war</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>me.zhengjie</groupId>
+			<artifactId>eladmin-system</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web-services</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>me.zhengjie</groupId>
+			<artifactId>eladmin-common</artifactId>
+			<version>2.6</version>
+		</dependency>
+	</dependencies>
+
+	<!-- 變數useProfile用在springboot啟動時套用的yml設定檔，及編譯後產出的war檔名稱 -->
+	<profiles>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <use-profile>prod</use-profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <use-profile>test</use-profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <use-profile>dev</use-profile>
+            </properties>
+            <activation>
+				<!-- 預設載入的yml設定檔 -->
+        		<activeByDefault>true</activeByDefault>
+      		</activation>
+        </profile>
+    </profiles>
+
+	<build>
+		<!-- 產出war檔名稱 -->
+		<finalName>ezadmin-${project.version}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+					<!-- 產出war檔路徑 -->
+					<outputDirectory>../deploy/${use-profile}</outputDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- 要求mvn clean刪除deploy資料夾下的war檔 -->
+    			<artifactId>maven-clean-plugin</artifactId>
+    			<configuration>
+					<filesets>
+						<fileset>
+							<directory>../deploy</directory>
+							<!-- 限定刪除的檔案類型 -->
+							<includes>
+								<include>**/*.war</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+    		</plugin>
+			<!-- 自動建立xsd內定義的物件 -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>2.5.0</version>
+				<executions>
+					<execution>
+						<id>xjc</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<sources>
+						<source>${project.basedir}/src/main/resources/ws/wsdoc.xsd</source>
+					</sources>
+				</configuration>
+			</plugin>
+			<!-- 跳過單元測試 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
+
+</project>
